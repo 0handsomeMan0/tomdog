@@ -35,14 +35,13 @@ public class OffsetSlidingWindow {
     }
 
     public synchronized static boolean commitOffset(){
-        Node headNode = OffsetSlidingWindow.getHeadNode();
-        if (headNode.getNext()!=null){
-            Node next = headNode.getNext();
+        Node node = OffsetSlidingWindow.getHeadNode();
+        if (node.getNext()!=null){
+            Node next = node.getNext();
             metadata.put(next.getTopicPartition(), next.getOffsetAndMetadata());
             MessageProcess.kafkaConsumer.commitSync(metadata);
             metadata.clear();
-            Node tempNode = headNode;
-            headNode = tempNode.getNext();
+            headNode = headNode.getNext();
             Node.count.decrementAndGet();
         }
         return true;
