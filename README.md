@@ -1,8 +1,10 @@
-# tomdog
+# tomdog 
+基于kafka的rpc框架  
 Remote Procedure Call Framework Based On Kafka
 
+# checkout源码打成jar包
 
-# Caller：
+# 调用方：
 
 
 ## 1.
@@ -25,7 +27,7 @@ Remote Procedure Call Framework Based On Kafka
 
 
 
-# Callee：
+# 被调用方：
 
 
 ## 1.
