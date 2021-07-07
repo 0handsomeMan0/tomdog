@@ -4,10 +4,10 @@ import java.lang.annotation.*;
 
 /**
  * @author zhouyu
- * @description 接受消息
+ * @description command注解
  **/
 @Documented
-@Target({ElementType.METHOD,ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OnCommand {
     String value() default "";
