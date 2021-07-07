@@ -2,6 +2,7 @@ package com.tomdog.core.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.tomdog.common.CommonData;
+import com.tomdog.core.CommandDeserializer;
 import com.tomdog.core.Message;
 import com.tomdog.core.MetadataCollection;
 import com.tomdog.core.OffsetSlidingWindow;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 
 public class MessageProcess extends Thread implements Message{
     private AtomicBoolean isRunning=new AtomicBoolean(true);
-    public static final KafkaConsumer kafkaConsumer;
+    public static final KafkaConsumer<String,Command> kafkaConsumer;
     private static final ExecutorService executorService;
     private static final int THREAD_NUMBER =Runtime.getRuntime().availableProcessors();
 
@@ -36,7 +37,7 @@ public class MessageProcess extends Thread implements Message{
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,Message.KAFKA_SERVER);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class.getName());
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CommandDeserializer.class.getName());
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, CommonData.TOM_DOG);
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,false);
         properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, StickyAssignor.class.getName());
@@ -58,31 +59,30 @@ public class MessageProcess extends Thread implements Message{
     }
 }
 class RecordsHandler extends Thread{
-    private ConsumerRecords<String, String> records;
-    public RecordsHandler(ConsumerRecords<String, String> records){
+    private ConsumerRecords<String, Command> records;
+    public RecordsHandler(ConsumerRecords<String, Command> records){
         this.records=records;
     }
 
     @Override
     public void run() {
         for (TopicPartition partition : records.partitions()) {
-            List<ConsumerRecord<String, String>> records = this.records.records(partition);
+            List<ConsumerRecord<String, Command>> records = this.records.records(partition);
             long lastConsumerOffSet = records.get(records.size() - 1).offset();
             Node node = NodeBuilder.builder().withTopicPartition(partition).withOffsetAndMetadata(new OffsetAndMetadata(lastConsumerOffSet + 1)).build();
             boolean isSuccess = OffsetSlidingWindow.addNode(node);
             if (isSuccess){
                 //process
-                for (ConsumerRecord<String, String> record : records) {
+                for (ConsumerRecord<String, Command> record : records) {
                     String topic = record.topic();
-                    String value = record.value();
+                    Command command = record.value();
                     try {
-                        Command command = JSON.parseObject(value, Command.class);
                         ConcurrentHashMap<String, MethodBean> allCommandBean = MetadataCollection.allCommandBean;
                         for (String key : allCommandBean.keySet()) {
                             if (key.startsWith(topic+"_")){
                                 MethodBean methodBean = allCommandBean.get(key);
                                 if (command.getParam()==null&&methodBean.getMethod().getParameterTypes().length==0){
-                                    methodBean.getMethod().invoke(methodBean.getObject(), command.getParam());
+                                    methodBean.getMethod().invoke(methodBean.getObject(), null);
                                 }else if (methodBean.getMethod().getParameterTypes()[0].getSimpleName().equals(command.getParam().getClass().getSimpleName())){
                                     methodBean.getMethod().invoke(methodBean.getObject(),command.getParam());
                                 }

@@ -10,10 +10,10 @@ public class MessageProcessStarter{
     public static void start(){
         try {
             AnalyzeAnnotation.getAllCommandMethod();
+            MessageProcess messageProcess = new MessageProcess();
+            messageProcess.start();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        MessageProcess messageProcess = new MessageProcess();
-        messageProcess.start();
     }
 }

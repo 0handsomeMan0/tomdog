@@ -9,16 +9,11 @@ import java.io.Serializable;
 public class Command<T> implements Serializable {
     private static final long serialVersionUID = 199886L;
     /**
-     * 待传递参数类型
-     */
-    private Class[] clazz;
-    /**
      * 待传递参数
      */
-    private  T[] param;
+    private  T param;
 
-    public Command(Class[] clazz, T[] param) {
-        this.clazz = clazz;
+    public Command(T param) {
         this.param = param;
     }
 
@@ -26,11 +21,11 @@ public class Command<T> implements Serializable {
     }
 
 
-    public T[] getParam() {
+    public T getParam() {
         return param;
     }
 
-    public void setParam(T[] param) {
+    public void setParam(T param) {
         this.param = param;
     }
 }
