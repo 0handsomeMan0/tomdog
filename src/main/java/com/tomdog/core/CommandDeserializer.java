@@ -30,8 +30,12 @@ public class CommandDeserializer implements Deserializer<Command> {
         int length=byteBuffer.getInt();
         byte[] objBytes = new byte[length];
         byteBuffer.get(objBytes);
-        Object obj= JSON.parseObject(new String(objBytes, StandardCharsets.UTF_8));
-        return new Command(obj);
+        String param= new String(objBytes, StandardCharsets.UTF_8);
+        length=byteBuffer.getInt();
+        objBytes = new byte[length];
+        byteBuffer.get(objBytes);
+        String simpleName=new String(objBytes, StandardCharsets.UTF_8);
+        return new Command(param,simpleName);
     }
 
 

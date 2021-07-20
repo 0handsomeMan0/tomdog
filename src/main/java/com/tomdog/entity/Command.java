@@ -13,8 +13,11 @@ public class Command<T> implements Serializable {
      */
     private  T param;
 
-    public Command(T param) {
+    private String paramType;
+
+    public Command(T param,String paramType) {
         this.param = param;
+        this.paramType=paramType;
     }
 
     public Command() {
@@ -27,5 +30,13 @@ public class Command<T> implements Serializable {
 
     public void setParam(T param) {
         this.param = param;
+    }
+
+    public String getParamType() {
+        return paramType;
+    }
+
+    public void setParamType(String paramType) {
+        this.paramType = paramType;
     }
 }

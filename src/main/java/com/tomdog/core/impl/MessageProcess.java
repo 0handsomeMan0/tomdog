@@ -83,12 +83,13 @@ class RecordsHandler extends Thread{
                                 MethodBean methodBean = allCommandBean.get(key);
                                 if (command.getParam()==null&&methodBean.getMethod().getParameterTypes().length==0){
                                     methodBean.getMethod().invoke(methodBean.getObject(), null);
-                                }else if (methodBean.getMethod().getParameterTypes()[0].getSimpleName().equals(command.getParam().getClass().getSimpleName())){
-                                    methodBean.getMethod().invoke(methodBean.getObject(),command.getParam());
+                                }else if (methodBean.getMethod().getParameterTypes().length!=0&&methodBean.getMethod().getParameterTypes()[0].getSimpleName().equals(command.getParamType())){
+                                    Object o = JSON.parseObject((String) command.getParam(), Class.forName(methodBean.getMethod().getParameterTypes()[0].getName()).newInstance().getClass());
+                                    methodBean.getMethod().invoke(methodBean.getObject(),o);
                                 }
                             }
                         }
-                    } catch (IllegalAccessException | InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException | InstantiationException e) {
                         e.printStackTrace();
                     }
                 }

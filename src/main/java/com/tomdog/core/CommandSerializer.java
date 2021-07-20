@@ -26,9 +26,12 @@ public class CommandSerializer implements Serializer<Command> {
         byte[] param=null;
         if (command.getParam()!=null){
             param=JSON.toJSONString(command.getParam()).getBytes(StandardCharsets.UTF_8);
-            ByteBuffer byteBuffer = ByteBuffer.allocate(CommonData.length + param.length);
+            byte[] simpleName = command.getParam().getClass().getSimpleName().getBytes(StandardCharsets.UTF_8);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(CommonData.length + param.length+CommonData.length+simpleName.length);
             byteBuffer.putInt(param.length);
             byteBuffer.put(param);
+            byteBuffer.putInt(simpleName.length);
+            byteBuffer.put(simpleName);
             return byteBuffer.array();
         }
         return new byte[0];

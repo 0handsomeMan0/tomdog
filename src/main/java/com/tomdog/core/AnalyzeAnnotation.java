@@ -21,7 +21,7 @@ public class AnalyzeAnnotation {
         Reflections reflections = new Reflections(Collections.singletonList(new MethodAnnotationsScanner()));
         Set<Method> classes = reflections.getMethodsAnnotatedWith(OnCommand.class);
         for (Method clazz : classes) {
-            String topic = clazz.getAnnotation(OnCommand.class).value()+"_"+System.currentTimeMillis();
+            String topic = clazz.getAnnotation(OnCommand.class).value()+"_"+UUID.randomUUID();
             Object instance = clazz.getDeclaringClass().newInstance();
             Class<?>[] parameterTypes = clazz.getParameterTypes();
             MethodBean methodBean = MethodBean.MethodBeanBuilder.builder().withObject(instance).withMethod(clazz).build();
