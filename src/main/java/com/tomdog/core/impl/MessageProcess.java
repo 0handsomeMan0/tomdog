@@ -44,7 +44,7 @@ public class MessageProcess extends Thread implements Message{
         kafkaConsumer=new KafkaConsumer(properties);
         Pattern compile = Pattern.compile("^.*?Command$");
         kafkaConsumer.subscribe(compile);
-        executorService=new ThreadPoolExecutor(THREAD_NUMBER,THREAD_NUMBER,0L, TimeUnit.MILLISECONDS,new ArrayBlockingQueue<>(1000),new ThreadPoolExecutor.CallerRunsPolicy());
+        executorService=new ThreadPoolExecutor(1,THREAD_NUMBER*2,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.AbortPolicy());
     }
 
 
