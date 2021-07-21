@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * @author zhouyu
- * @description 序列化器
+ * @description 序列化command
  **/
 public class CommandSerializer implements Serializer<Command> {
     @Override

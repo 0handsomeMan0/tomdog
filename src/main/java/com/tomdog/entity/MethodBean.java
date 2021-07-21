@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author zhouyu
- * @description bean集合
+ * @description methodBean
  **/
 public class MethodBean {
     private Object object;

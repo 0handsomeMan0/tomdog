@@ -4,7 +4,7 @@ import com.tomdog.core.AnalyzeAnnotation;
 
 /**
  * @author zhouyu
- * @description 消息处理线程启动类
+ * @description command处理线程启动类
  **/
 public class MessageProcessStarter{
     public static void start(){

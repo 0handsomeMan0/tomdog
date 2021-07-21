@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * @author zhouyu
- * @description TODO
+ * @description 反序列化command
  **/
 public class CommandDeserializer implements Deserializer<Command> {
     @Override

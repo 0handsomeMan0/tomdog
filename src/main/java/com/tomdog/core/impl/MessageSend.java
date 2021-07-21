@@ -17,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * @author zhouyu
- * @description 消息发送类
+ * @description command发送类
  **/
 public class MessageSend implements Message {
     private static KafkaProducer<String, Command> kafkaProducer=null;

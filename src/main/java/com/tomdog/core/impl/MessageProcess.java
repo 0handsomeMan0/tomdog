@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author zhouyu
- * @description 消息处理类
+ * @description command处理类
  **/
 
 public class MessageProcess extends Thread implements Message{
@@ -44,7 +44,7 @@ public class MessageProcess extends Thread implements Message{
         kafkaConsumer=new KafkaConsumer(properties);
         Pattern compile = Pattern.compile("^.*?Command$");
         kafkaConsumer.subscribe(compile);
-        executorService=new ThreadPoolExecutor(1,THREAD_NUMBER*2,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.AbortPolicy());
+        executorService=new ThreadPoolExecutor(THREAD_NUMBER,THREAD_NUMBER,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.AbortPolicy());
     }
 
 
